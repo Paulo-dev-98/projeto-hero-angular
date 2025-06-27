@@ -1,0 +1,27 @@
+<h2>Lista de Heróis</h2>
+
+<table border="1" style="width: 100%; text-align: left;">
+  <thead>
+  <tr>
+    <th>Nome</th>
+    <th>Nome do Herói</th>
+    <th>Data de Nascimento</th>
+    <th>Altura</th>
+    <th>Peso</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let heroi of herois">
+    <td>{{ heroi.nome }}</td>
+    <td>{{ heroi.nomeDoHeroi }}</td>
+    <td>{{ heroi.dataDeNascimento | date: 'dd/MM/yyyy' }}</td>
+    <td>{{ heroi.altura }}</td>
+    <td>{{ heroi.peso }}</td>
+  </tr>
+  </tbody>
+</table>
+
+<!-- Caso a lista esteja vazia -->
+<div *ngIf="herois.length === 0">
+  Nenhum herói encontrado.
+</div>
