@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Heroi, HeroiService } from '../../services/heroi.service';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './herois.component.html',
   styleUrls: ['./herois.component.css']
 })
 export class HeroisComponent implements OnInit {
 
   herois: Heroi[] = [];
+  mostrarFormulario: boolean = false;
 
   constructor(private heroiService: HeroiService) {}
 
@@ -21,6 +23,42 @@ export class HeroisComponent implements OnInit {
       this.herois = data._embedded?.heroiVoes || [];
     }, error => {
       console.error('Erro ao buscar heróis:', error);
+    });
+  }
+
+  novoHeroi: Heroi = {
+    nome: '',
+    nomeDoHeroi: '',
+    dataDeNascimento: '',
+    altura: 0,
+    peso: 0
+  };
+
+  abrirFormulario() {
+    this.mostrarFormulario = true;
+    this.novoHeroi = {
+      nome: '',
+      nomeDoHeroi: '',
+      dataDeNascimento: '',
+      altura: 0,
+      peso: 0
+    };
+  }
+
+  fecharFormulario() {
+    this.mostrarFormulario = false;
+  }
+
+  cadastrarHeroi() {
+    this.heroiService.cadastrarHeroi(this.novoHeroi).subscribe(() => {
+      this.carregarHerois();
+      this.fecharFormulario();
+    });
+  }
+
+  carregarHerois() {
+    this.heroiService.listarHerois().subscribe(dados => {
+      this.herois = dados;
     });
   }
 

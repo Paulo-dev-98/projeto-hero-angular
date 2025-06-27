@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface Heroi {
-  id: number;
+  id?: number;
   nome: string;
   nomeDoHeroi: string;
   dataDeNascimento: string;
@@ -22,4 +22,9 @@ export class HeroiService {
   listarHerois(): Observable<Heroi[]> {
     return this.http.get<Heroi[]>(this.apiUrl);
   }
+
+  cadastrarHeroi(heroi: Heroi): Observable<Heroi> {
+    return this.http.post<Heroi>(this.apiUrl, heroi);
+  }
+
 }
