@@ -14,6 +14,7 @@ export class HeroisComponent implements OnInit {
 
   herois: Heroi[] = [];
   mostrarFormulario: boolean = false;
+  editando: boolean = false;
 
   constructor(private heroiService: HeroiService) {}
 
@@ -49,16 +50,34 @@ export class HeroisComponent implements OnInit {
     this.mostrarFormulario = false;
   }
 
-  cadastrarHeroi() {
-    this.heroiService.cadastrarHeroi(this.novoHeroi).subscribe(
-      (heroiSalvo) => {
-        this.herois.push(heroiSalvo);
+  salvarHeroi() {
+    if (this.editando && this.novoHeroi.id) {
+      this.heroiService.atualizarHeroi(this.novoHeroi).subscribe(() => {
+        const index = this.herois.findIndex(h => h.id === this.novoHeroi.id);
+
+        if (index !== -1) {
+          this.herois[index] = { ...this.novoHeroi };
+        }
+
         this.fecharFormulario();
-      },
-      (erro) => {
-        console.error('Erro ao cadastrar herói:', erro);
-      }
-    );
+      });
+    } else {
+      this.heroiService.cadastrarHeroi(this.novoHeroi).subscribe(
+        (heroiSalvo) => {
+          this.herois.push(heroiSalvo);
+          this.fecharFormulario();
+        },
+        (erro) => {
+          console.error('Erro ao cadastrar herói:', erro);
+        }
+      );
+    }
+  }
+
+  editarHeroi(heroi: Heroi) {
+    this.mostrarFormulario = true;
+    this.novoHeroi = { ...heroi }; // copia os dados para o formulário
+    this.editando = true;
   }
 
 }

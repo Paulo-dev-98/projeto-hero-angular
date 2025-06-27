@@ -27,4 +27,8 @@ export class HeroiService {
     return this.http.post<Heroi>(this.apiUrl, heroi);
   }
 
+  atualizarHeroi(heroi: Heroi): Observable<Heroi> {
+    return this.http.put<Heroi>(`${this.apiUrl}/${heroi.id}`, heroi);
+  }
+
 }
