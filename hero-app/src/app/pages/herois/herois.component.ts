@@ -50,16 +50,15 @@ export class HeroisComponent implements OnInit {
   }
 
   cadastrarHeroi() {
-    this.heroiService.cadastrarHeroi(this.novoHeroi).subscribe(() => {
-      this.carregarHerois();
-      this.fecharFormulario();
-    });
-  }
-
-  carregarHerois() {
-    this.heroiService.listarHerois().subscribe(dados => {
-      this.herois = dados;
-    });
+    this.heroiService.cadastrarHeroi(this.novoHeroi).subscribe(
+      (heroiSalvo) => {
+        this.herois.push(heroiSalvo);
+        this.fecharFormulario();
+      },
+      (erro) => {
+        console.error('Erro ao cadastrar herói:', erro);
+      }
+    );
   }
 
 }
