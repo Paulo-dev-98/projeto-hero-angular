@@ -19,11 +19,18 @@ export class HeroisComponent implements OnInit {
   constructor(private heroiService: HeroiService) {}
 
   ngOnInit(): void {
-    this.heroiService.listarHerois().subscribe((data: any) => {
-      console.log('Heróis recebidos:', data);
-      this.herois = data._embedded?.heroiVoes || [];
-    }, error => {
-      console.error('Erro ao buscar heróis:', error);
+    this.heroiService.listarHerois().subscribe({
+      next: (data: any) => {
+        this.herois = (data._embedded?.heroiVoes || []).map((heroi: any) => {
+          const url = heroi._links.self.href;
+          const id = parseInt(url.substring(url.lastIndexOf('/') + 1));
+          return { ...heroi, id };
+        });
+      },
+      error: (erro) => {
+        console.error('Erro ao carregar heróis:', erro);
+        alert('Erro ao buscar a lista de heróis. Tente novamente mais tarde.');
+      }
     });
   }
 
@@ -78,6 +85,21 @@ export class HeroisComponent implements OnInit {
     this.mostrarFormulario = true;
     this.novoHeroi = { ...heroi }; // copia os dados para o formulário
     this.editando = true;
+  }
+
+  deletarHeroi(heroi: Heroi) {
+
+    if (confirm(`Deseja realmente excluir o herói "${heroi.nomeDoHeroi}"?`)) {
+      this.heroiService.deletarHeroi(heroi.id!).subscribe({
+        next: () => {
+          this.herois = this.herois.filter(h => h.id !== heroi.id);
+        },
+        error: (erro) => {
+          console.error('Erro ao tentar deletar herói:', erro);
+          alert('Erro ao deletar o herói. Verifique se ele existe ou tente novamente mais tarde.');
+        }
+      });
+    }
   }
 
 }

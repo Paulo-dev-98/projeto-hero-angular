@@ -31,4 +31,8 @@ export class HeroiService {
     return this.http.put<Heroi>(`${this.apiUrl}/${heroi.id}`, heroi);
   }
 
+  deletarHeroi(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
 }
