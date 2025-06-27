@@ -55,36 +55,53 @@ export class HeroisComponent implements OnInit {
 
   fecharFormulario() {
     this.mostrarFormulario = false;
+    this.editando = false;
+    this.novoHeroi = {
+      nome: '',
+      nomeDoHeroi: '',
+      dataDeNascimento: '',
+      altura: 0,
+      peso: 0
+    };
   }
 
-  salvarHeroi() {
-    if (this.editando && this.novoHeroi.id) {
-      this.heroiService.atualizarHeroi(this.novoHeroi).subscribe(() => {
-        const index = this.herois.findIndex(h => h.id === this.novoHeroi.id);
+  criarHeroi() {
+    this.heroiService.cadastrarHeroi(this.novoHeroi).subscribe((heroiSalvo) => {
+      this.herois.push(heroiSalvo);
+      this.fecharFormulario();
+    }, (erro) => {
+      console.error('Erro ao cadastrar herói:', erro);
+      alert('Erro ao cadastrar herói.');
+    });
+  }
 
-        if (index !== -1) {
-          this.herois[index] = { ...this.novoHeroi };
-        }
+  editarHeroiConfirmado() {
+    const payload = {
+      indentificador: this.novoHeroi.id,
+      nome: this.novoHeroi.nome,
+      nomeDoHeroi: this.novoHeroi.nomeDoHeroi,
+      dataDeNascimento: this.novoHeroi.dataDeNascimento,
+      altura: this.novoHeroi.altura,
+      peso: this.novoHeroi.peso
+    };
 
-        this.fecharFormulario();
-      });
-    } else {
-      this.heroiService.cadastrarHeroi(this.novoHeroi).subscribe(
-        (heroiSalvo) => {
-          this.herois.push(heroiSalvo);
-          this.fecharFormulario();
-        },
-        (erro) => {
-          console.error('Erro ao cadastrar herói:', erro);
-        }
-      );
-    }
+    this.heroiService.atualizarHeroi(payload).subscribe(() => {
+      const index = this.herois.findIndex(h => h.id === this.novoHeroi.id);
+      if (index !== -1) {
+        this.herois[index] = { ...this.novoHeroi };
+        this.herois = [...this.herois];
+      }
+      this.fecharFormulario();
+    }, (erro) => {
+      console.error('Erro ao atualizar herói:', erro);
+      alert('Erro ao atualizar herói.');
+    });
   }
 
   editarHeroi(heroi: Heroi) {
-    this.mostrarFormulario = true;
-    this.novoHeroi = { ...heroi }; // copia os dados para o formulário
+    this.novoHeroi = { ...heroi };
     this.editando = true;
+    this.mostrarFormulario = true;
   }
 
   deletarHeroi(heroi: Heroi) {

@@ -5,7 +5,7 @@
 
 <!-- Formulário de cadastro -->
 <div *ngIf="mostrarFormulario" style="margin-top: 20px;">
-  <form (ngSubmit)="salvarHeroi()">
+  <form (ngSubmit)="editando ? editarHeroiConfirmado() : criarHeroi()">
     <label>Nome:</label>
     <input type="text" [(ngModel)]="novoHeroi.nome" name="nome" required />
 
