@@ -15,6 +15,8 @@ export class HeroisComponent implements OnInit {
   herois: Heroi[] = [];
   mostrarFormulario: boolean = false;
   editando: boolean = false;
+  mostrarBuscaPorId: boolean = false;
+  idBusca: number | null = null;
 
   constructor(private heroiService: HeroiService) {}
 
@@ -63,6 +65,26 @@ export class HeroisComponent implements OnInit {
       altura: 0,
       peso: 0
     };
+  }
+
+  abrirBuscaPorId() {
+    this.mostrarBuscaPorId = true;
+    this.idBusca = null;
+  }
+
+  buscarHeroiPorId() {
+    if (this.idBusca != null) {
+      this.heroiService.buscarHeroiPorId(this.idBusca).subscribe(
+        (heroi) => {
+          this.herois = [heroi];
+          this.mostrarBuscaPorId = false;
+        },
+        (erro) => {
+          console.error('Herói não encontrado:', erro);
+          alert('Herói não encontrado com esse ID.');
+        }
+      );
+    }
   }
 
   criarHeroi() {

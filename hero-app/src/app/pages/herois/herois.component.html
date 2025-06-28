@@ -2,34 +2,53 @@
 
 <!-- Botão para abrir o formulário -->
 <button (click)="abrirFormulario()">Cadastrar Herói</button>
+<span style="margin: 0 10px;"></span>
+<button type="button" (click)="abrirBuscaPorId()">Buscar Herói por ID</button>
+
+<div *ngIf="mostrarBuscaPorId" style="margin-top: 15px;">
+  <label for="idBusca">ID do Herói:</label>
+  <input type="number" [(ngModel)]="idBusca" />
+  <button type="button" (click)="buscarHeroiPorId()">Buscar</button>
+  <button type="button" (click)="mostrarBuscaPorId = false">Cancelar</button>
+  <span style="margin: 0 10px;"></span>
+</div>
 
 <!-- Formulário de cadastro -->
 <div *ngIf="mostrarFormulario" style="margin-top: 20px;">
   <form (ngSubmit)="editando ? editarHeroiConfirmado() : criarHeroi()">
     <label>Nome:</label>
     <input type="text" [(ngModel)]="novoHeroi.nome" name="nome" required />
+    <span style="margin: 0 10px;"></span>
 
     <label>Nome do Herói:</label>
     <input type="text" [(ngModel)]="novoHeroi.nomeDoHeroi" name="nomeDoHeroi" required />
+    <span style="margin: 0 10px;"></span>
 
     <label>Data de Nascimento:</label>
     <input type="date" [(ngModel)]="novoHeroi.dataDeNascimento" name="dataDeNascimento" required />
+    <span style="margin: 0 10px;"></span>
 
     <label>Altura (m):</label>
     <input type="number" step="0.01" [(ngModel)]="novoHeroi.altura" name="altura" required />
+    <span style="margin: 0 10px;"></span>
 
     <label>Peso (kg):</label>
     <input type="number" step="0.1" [(ngModel)]="novoHeroi.peso" name="peso" required />
+    <span style="margin: 0 10px;"></span>
 
     <br /><br />
     <button type="submit">{{ editando ? 'Atualizar' : 'Salvar' }}</button>
+    <span style="margin: 0 10px;"></span>
     <button type="button" (click)="fecharFormulario()">Cancelar</button>
   </form>
 </div>
 
+<span style="margin: 0 10px;"></span>
+
 <table border="1" style="width: 100%; text-align: left;">
   <thead>
   <tr>
+    <th>Id</th>
     <th>Nome</th>
     <th>Nome do Herói</th>
     <th>Data de Nascimento</th>
@@ -40,6 +59,7 @@
   </thead>
   <tbody>
   <tr *ngFor="let heroi of herois">
+    <td>{{ heroi.id }}</td>
     <td>{{ heroi.nome }}</td>
     <td>{{ heroi.nomeDoHeroi }}</td>
     <td>{{ heroi.dataDeNascimento | date: 'dd/MM/yyyy' }}</td>

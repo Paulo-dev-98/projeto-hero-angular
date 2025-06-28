@@ -23,12 +23,16 @@ export class HeroiService {
     return this.http.get<Heroi[]>(this.apiUrl);
   }
 
+  buscarHeroiPorId(id: number): Observable<Heroi> {
+    return this.http.get<Heroi>(`${this.apiUrl}/${id}`);
+  }
+
   cadastrarHeroi(heroi: Heroi): Observable<Heroi> {
     return this.http.post<Heroi>(this.apiUrl, heroi);
   }
 
   atualizarHeroi(heroi: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}`, heroi); // ✅ sem ID na URL
+    return this.http.put<any>(`${this.apiUrl}`, heroi);
   }
 
   deletarHeroi(id: number): Observable<void> {
